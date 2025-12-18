@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <link rel="stylesheet" href="source/styles/main.css">
+  <link rel="stylesheet" href="source/styles/lk.css">
+  <title>lk</title>
+  <style>
+    @font-face {
+      font-family: Journalism;
+      src: url('source/files/journalism2.ttf') format('truetype');
+    }
+  </style>
+  <style>
+    @font-face {
+      font-family: Georgia;
+      src: url('source/files/georgia.ttf') format('truetype');
+    }
+  </style>
+</head>
+<script>
+    let currentDate = new Date();
+    let selectedDay = null;
+
+    function loadDeadlines() {
+        return JSON.parse(localStorage.getItem("deadlines") || "{}");
+    }
+
+    function saveDeadlinesToStorage(deadlines) {
+        localStorage.setItem("deadlines", JSON.stringify(deadlines));
+    }
+
+    function renderDeadlineList() {
+        const list = document.getElementById("deadlineList");
+        list.innerHTML = "";
+
+        const deadlines = loadDeadlines();
+
+        const months = ["Января","Февраля","Марта","Апреля","Мая","Июня",
+                        "Июля","Августа","Сентября","Октября","Ноября","Декабря"];
+
+        for (const key in deadlines) {
+            const [year, month, day] = key.split("-").map(Number);
+
+            const li = document.createElement("li");
+            li.classList.add("list-group-item");
+
+            li.textContent = `${day}${months[month]}—${deadlines[key]}`;
+
+            list.appendChild(li);
+        }
+    }
+
+    function renderCalendar() {
+        const grid = document.getElementById("calendarGrid");
+        const monthLabel = document.getElementById("calendarMonth");
+        grid.innerHTML = "";
+
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const first = new Date(year, month, 1).getDay();
+        const daysCount = new Date(year, month + 1, 0).getDate();
+
+        const deadlines = loadDeadlines();
+
+        const monthNames = ["Январь","Февраль","Март","Апрель","Май","Июнь",
+                            "Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+
+        monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+        for (let i = 0; i < (first + 6) % 7; i++) {
+            const empty = document.createElement("div");
+            grid.appendChild(empty);
+        }
+
+        for (let day = 1; day <= daysCount; day++) {
+            const div = document.createElement("div");
+            div.classList.add("day");
+            div.textContent = day;
+
+            const key = `${year}-${month}-${day}`;
+            if (deadlines[key]) {
+                div.classList.add("deadline-day");
+            }
+
+            div.onclick = () => { selectedDay = key; };
+            grid.appendChild(div);
+        }
+    }
+
+    function changeMonth(step) {
+        currentDate.setMonth(currentDate.getMonth() + step);
+        renderCalendar();
+    }
+
+    function saveDeadline() {
+        if (!selectedDay) return alert("Выберите дату!");
+        const text = document.getElementById("deadlineInput").value.trim();
+        if (!text) return alert("Введите текст дедлайна!");
+
+        const deadlines = loadDeadlines();
+        deadlines[selectedDay] = text;
+        saveDeadlinesToStorage(deadlines);
+
+        document.getElementById("deadlineInput").value = "";
+        renderCalendar();
+        renderDeadlineList();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        renderCalendar();
+        renderDeadlineList();
+    });
+</script>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const photoInput = document.getElementById("photoInput");
+        if (photoInput) {
+            photoInput.addEventListener("change", function () {
+                const file = this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const profilePhoto = document.getElementById("profilePhoto");
+                    if (profilePhoto) profilePhoto.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    });
+
+    let currentButtonId = null;
+
+    function openEditor(btnId) {
+        currentButtonId = btnId;
+        const btn = document.getElementById(btnId);
+        const popupText = document.getElementById("popupText");
+        const popupBG = document.getElementById("popupBG");
+
+        if (btn && popupText) {
+            popupText.value = btn.textContent;
+        }
+        if (popupBG) {
+            popupBG.style.display = "flex";
+        }
+    }
+
+    function closeEditor() {
+        const popupBG = document.getElementById("popupBG");
+        if (popupBG) popupBG.style.display = "none";
+    }
+
+    function saveText() {
+        if (currentButtonId) {
+            const btn = document.getElementById(currentButtonId);
+            const popupText = document.getElementById("popupText");
+            if (btn && popupText) {
+                btn.textContent = popupText.value;
+            }
+        }
+        closeEditor();
+    }
+</script>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="алиллуя.html"><img src="source/images/Frame 3 (1).png" alt="" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="home.html">Домой</a>
+            </li>
+            <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Личный кабинет
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="login.html">Войти в личный кабинет</a></li>
+            <li><a class="dropdown-item" href="#">Выйти из личного кабинета</a></li>
+          </ul>
+        </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Календарь
+              </a>
+              <ul class="dropdown-menu p-3" aria-labelledby="navbarDropdown" style="width: 300px;">
+                <h6 class="dropdown-header">Календарь</h6>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <button class="btn btn-sm btn-outline-secondary" onclick="changeMonth(-1)">‹</button>
+                  <strong id="calendarMonth"></strong>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="changeMonth(1)">›</button>
+                </div>
+
+                <div id="calendarGrid" class="d-grid"
+                  style="grid-template-columns: repeat(7, 1fr); gap: 5px; font-size: 14px;">
+                </div>
+
+                <input id="deadlineInput" type="text" class="form-control mt-3" placeholder="Текст дедлайна">
+
+                <button class="knop btn-danger w-100 mt-2 col" onclick="saveDeadline()">Добавить</button>
+                <hr>
+                <h6 class="mt-2">Ваши дедлайны:</h6>
+                <ul id="deadlineList" class="list-group" style="max-height: 200px; overflow-y: auto;"></ul>
+
+              </ul>
+            </li>
+          </ul>
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+            <button class="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+ <section>
+<div class="title">ЛИЧНЫЙ КАБИНЕТ</div>
+        
+        <div class="container">
+        <div class="profile-row">
+            <div>
+                <div class="photo-box" id="photoBox">
+                    <img id="profilePhoto" src="" alt="">
+                </div>
+                <input type="file" id="photoInput" accept="image/*" style="display:none">
+                <button class="edit-photo-btnn" onclick="document.getElementById('photoInput').click()">РЕДАКТИРОВАТЬ</button>
+            </div>
+    
+            <div class="info-block">
+                <div class="user-info">
+                    <div class="name-line">МЕТРОПОЛИТЕН СВАГОВИЧ</div> 
+                    <div class="age">19 лет</div>
+                </div>
+                
+                <div class="student-line">студент - 2 курс</div>
+                
+    
+                <div class="btnn-row">
+                    <div class="btnn" id="btn1">текущие проекты</div>
+                    <img src="source/images/606835.png" class="pen" onclick="openEditor('btn1')">
+                </div>
+    
+                <div class="btnn-row">
+                    <div class="btnn" id="btnn2">о себе</div>
+                    <img src="source/images/606835.png" class="pen" onclick="openEditor('btnn2')">
+                </div>
+
+                <div class="btnn-row">
+                    <div class="btnn" id="btn3">научные интересы</div>
+                    <img src="source/images/606835.png" class="pen" onclick="openEditor('btn3')">
+                </div>
+            </div>
+    
+        </div>
+    
+    </div>
+</section>    
+
+<div class="popup-bg" id="popupBG">
+    <div class="popup">
+        <h3>Редактировать</h3>
+        <textarea id="popupText"></textarea>
+        <br>
+        <button onclick="saveText()">Сохранить</button>
+        <button onclick="closeEditor()">Отмена</button>
+    </div>
+</div>
+
+  <footer>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-4 col-md-12 footer-text text-center">
+          <p>2025</p>
+        </div>
+        <div class="col-lg-4 col-md-12 footer-text text-center">
+          <a class="text"
+            href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://kantiana.ru/&ved=2ahUKEwjTo7i74NuQAxVeHRAIHScrFZYQFnoECBkQAQ&usg=AOvVaw09BsDRLjSaw5tTnkJtgrno">БФУ
+            Им. Канта</a>
+        </div>
+        <div class="col-lg-4 col-md-12 footer-text text-center">
+          <p>Created by Arina Mandrikova</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>  
+        
+</body>
+
+</html>

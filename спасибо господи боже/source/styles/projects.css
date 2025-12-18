@@ -1,0 +1,58 @@
+.list-group-item {
+    list-style-type: none;
+    font-family: Georgia;
+    text-decoration: none;
+    background-color: rgb(225, 225, 225);
+    font-size: 20px;
+    padding: 0;
+    padding-top: 12px;
+    margin: 0;
+}
+.list {
+    font-family: Journalism;
+    font-size: 3rem;
+    list-style-type: none;
+    
+}
+
+.progress {
+    background-color: rgb(255, 255, 255);
+    border-radius: 40px;
+    height: 30px;
+}
+
+.progress-bar {
+    border-radius: 40px;
+    background-color: #49696d;
+    height: 30px;
+}
+
+.cavousel-control-prot {
+    display: flex;
+    font-size: 1em;
+    margin-top: 10px;
+    width: 200px;
+    height: 50px;
+    background-color: #49696d;
+    border-radius: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.cavousel-control-prot:hover {
+    background-color: #028E9B;
+    border-color: #49696d;
+}
+
+.container {
+    padding-bottom: 20px;
+}
+
+.visualy-hidden {
+    color: azure;
+}
+
+.carousel-inner {
+    margin-top: 15px;
+}
+

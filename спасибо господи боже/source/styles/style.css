@@ -1,0 +1,66 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Journalism', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: rgb(153, 153, 153);
+}
+
+.wrapper h1 {
+  font-size: 70px;
+    width: 100%;
+    height: 100px;
+  text-align: center;
+  
+}
+.wrapper .input-box {
+  width: 100%;
+  height: 50px;
+  margin: 30px 0;
+  margin-top: 5px;
+  position: relative;
+}
+
+.input-box input {
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+  border: 01px solid;
+  border-radius: 40px;
+  padding: 20px 45px 20px 20px;
+  font-size: 30px;
+  font-family: Georgia;
+}
+
+.input-box svg {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.submit {
+  width: 100px;
+  height: 40px;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 100;
+  background-color: rgb(255, 255, 255);
+}
+
+.info { 
+  margin-top:20px; 
+  color:  rgb(255, 255, 255); 
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 25px;
+}
